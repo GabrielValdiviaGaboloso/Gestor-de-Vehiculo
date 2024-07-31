@@ -1,0 +1,12 @@
+/* Optional: Set a minimum height for the columns */
+.col-md-6 {
+    min-height: 300px; /* Adjust as needed */
+  }
+  
+  /* Optional: Center text within the columns */
+  .col-md-6 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }

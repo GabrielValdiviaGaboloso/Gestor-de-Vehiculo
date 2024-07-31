@@ -1,3 +1,42 @@
-<p>
-  tabla works!
-</p>
+<div class="container mt-3">
+  <div class="row mb-3">
+    <div class="col-12">
+      <h1>Gestor de Vehículo</h1>
+    </div>
+    <div class="col-lg-8 col-md-10 col-12">
+      <input 
+        type="text" 
+        id="searchBox" 
+        class="form-control form-control-lg" 
+        placeholder="Buscar modelo..."
+        (input)="onSearch($event)" />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="mt-4">
+        <table id="example" class="display table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th>Marca</th>
+              <th>Modelo</th>
+              <th>Año</th>
+              <th>City MPG</th>
+              <th>Highway MPG</th>
+              <th>Comb. MPG</th>
+              <th>Cilindrada</th>
+              <th>Desplazamiento</th>
+              <th>Tracción</th>
+              <th>Tipo de Combustible</th>
+              <th>Transmisión</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+

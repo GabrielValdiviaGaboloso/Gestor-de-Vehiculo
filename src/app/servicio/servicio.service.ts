@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment as env } from '../environment.ts/environment'; 
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServicioService {
 
-constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-
-users() {
-  this.http.get('https://jsonplaceholder.typicode.com/users');
-}
-
+  getCars(query: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'X-Api-Key': `${env.APIL_KEY}`
+    });
+    return this.http.get(`${env.URL_PRIVATE}?limit=200&model=${query}`, { headers });
+  }
 }
