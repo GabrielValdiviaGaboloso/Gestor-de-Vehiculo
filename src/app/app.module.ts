@@ -4,11 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { TablaComponent } from './componente/Tabla/tabla.component';
+import { MapaComponent } from './componente/Mapa/Mapa.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TablaComponent
+    TablaComponent,
+    MapaComponent
   ],
   imports: [
     BrowserModule,
