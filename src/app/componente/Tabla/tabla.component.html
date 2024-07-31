@@ -1,9 +1,9 @@
 <div class="container mt-3">
   <div class="row mb-3">
-    <div class="col-12">
+    <div class="col-12 text-center">
       <h1>Gestor de Vehículo</h1>
     </div>
-    <div class="col-lg-8 col-md-10 col-12">
+    <div class="col-lg-8 col-md-10 col-12 mx-auto">
       <input 
         type="text" 
         id="searchBox" 
@@ -15,16 +15,16 @@
 
   <div class="row">
     <div class="col-md-12">
-      <div class="mt-4">
+      <div class="table-wrapper mt-4">
         <table id="example" class="display table table-striped table-bordered">
           <thead>
             <tr>
               <th>Marca</th>
               <th>Modelo</th>
               <th>Año</th>
-              <th>City MPG</th>
-              <th>Highway MPG</th>
-              <th>Comb. MPG</th>
+              <th>Ciudad MPG</th>
+              <th >Carretera MPG</th>
+              <th >Comb. MPG</th>
               <th>Cilindrada</th>
               <th>Desplazamiento</th>
               <th>Tracción</th>
@@ -33,10 +33,31 @@
               <th>Acciones</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+            <!-- Aquí van los datos -->
+          </tbody>
         </table>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Detalles del Vehículo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Aquí se mostrarán los detalles del vehículo -->
+        <p id="modalContent">Cargando...</p>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

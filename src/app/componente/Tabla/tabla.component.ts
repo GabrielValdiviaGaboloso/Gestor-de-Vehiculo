@@ -13,6 +13,7 @@ declare var $: any;
 export class TablaComponent implements OnInit, OnDestroy {
   dataTable: any;
   private searchQuery = new BehaviorSubject<string>(''); // Consulta por defecto vacía
+  selectedData: any; // Para almacenar los datos del vehículo seleccionado
 
   constructor(private ServicioService: ServicioService) {}
 
@@ -21,7 +22,7 @@ export class TablaComponent implements OnInit, OnDestroy {
 
     // Configurar debounce para la entrada de búsqueda
     this.searchQuery.pipe(
-      debounceTime(300) // Esperar 300ms después de que el usuario deje de escribir
+      debounceTime(200) // Esperar 200ms después de que el usuario deje de escribir
     ).subscribe(query => {
       this.loadTableData(query);
     });
@@ -36,35 +37,32 @@ export class TablaComponent implements OnInit, OnDestroy {
         { title: 'Modelo', data: 'model' },
         { title: 'Año', data: 'year' },
         { title: 'City MPG', data: 'city_mpg' },
-        { title: 'Highway MPG', data: 'highway_mpg' },
-        { title: 'Comb. MPG', data: 'combination_mpg' },
+        { title: 'Carretera MPG', data: 'highway_mpg' },
+        { title: 'Ambos MPG', data: 'combination_mpg' },
         { title: 'Cilindrada', data: 'cylinders' },
         { title: 'Desplazamiento', data: 'displacement' },
         { title: 'Tracción', data: 'drive' },
         { title: 'Tipo de Combustible', data: 'fuel_type' },
         { title: 'Transmisión', data: 'transmission' },
         {
-          title: 'Acciones',
+          title: 'Mapa',
           data: null,
-          defaultContent: '<button class="btn btn-info">Detalles</button>',
+          defaultContent: '<button type="button" class="btn btn-primary">Ver Detalles</button>',
           orderable: false
         }
       ],
-      dom: 'Bfrtip', // Ajustar según sea necesario
-      buttons: [], // Eliminar botones predeterminados (por ejemplo, imprimir, excel)
-      searching: false, // Deshabilitar la caja de búsqueda predeterminada
+      dom: 'Bfrtip',
+      buttons: [],
+      searching: false,
       paging: true,
-      pageLength: 20, // Configurar el número de registros por página
+      pageLength: 20,
       info: true,
       processing: true,
       language: {
-        // Traducción al español
         sEmptyTable: "No hay datos disponibles en la tabla",
         sInfo: "Mostrando _START_ a _END_",
         sInfoEmpty: "Mostrando 0 a 0 ",
         sInfoFiltered: "(filtrado de _MAX_ entradas en total)",
-        sInfoPostFix: "",
-        sInfoThousands: ",",
         sLengthMenu: "Mostrar _MENU_ entradas",
         sLoadingRecords: "Cargando...",
         sProcessing: "Procesando...",
@@ -79,18 +77,15 @@ export class TablaComponent implements OnInit, OnDestroy {
         oAria: {
           sSortAscending: ": Activar para ordenar la columna en orden ascendente",
           sSortDescending: ": Activar para ordenar la columna en orden descendente"
-        },
-        scrollX: true, // Activa el scroll horizontal
-        responsive: true, // Hace que la tabla sea responsive
-        paging: true, // Habilita la paginación
-        searching: true // Habilita la búsqueda
+        }
       }
     });
 
     // Manejar el evento de clic para los botones
     $('#example tbody').on('click', 'button', (event: any) => {
       const data = this.dataTable.row($(event.target).parents('tr')).data();
-      this.handleButtonClick(data);
+      this.selectedData = data;
+      this.showModal();
     });
   }
 
@@ -103,15 +98,23 @@ export class TablaComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Mostrar el modal y actualizar el contenido
+  showModal(): void {
+    const content = `
+    <div class="row">
+          <div class="col-4"><p><strong>Marca:</strong> ${this.selectedData.make}</p></div>
+          <div class="col-4"><p><strong>Modelo:</strong> ${this.selectedData.model}</p></div>
+          <div class="col-4"><p><strong>Año:</strong> ${this.selectedData.year}</p></div>
+        </div>
+    `;
+    $('#modalContent').html(content);
+    $('#exampleModal').modal('show'); // Mostrar el modal
+  }
+
   // Manejar eventos de entrada del campo de búsqueda
   onSearch(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     this.searchQuery.next(inputElement.value); // Actualizar el BehaviorSubject con la nueva consulta
-  }
-
-  // Manejar el clic en el botón de acción
-  handleButtonClick(data: any): void {
-    alert(`Detalles:\nMarca: ${data.make}\nModelo: ${data.model}\nAño: ${data.year}\nCity MPG: ${data.city_mpg}\nHighway MPG: ${data.highway_mpg}\nComb. MPG: ${data.combination_mpg}\nCilindrada: ${data.cylinders}\nDesplazamiento: ${data.displacement}\nTracción: ${data.drive}\nTipo de Combustible: ${data.fuel_type}\nTransmisión: ${data.transmission}`);
   }
 
   ngOnDestroy(): void {

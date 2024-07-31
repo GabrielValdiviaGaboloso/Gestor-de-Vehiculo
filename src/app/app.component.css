@@ -1,12 +1,25 @@
-/* Optional: Set a minimum height for the columns */
-.col-md-6 {
-    min-height: 300px; /* Adjust as needed */
-  }
-  
-  /* Optional: Center text within the columns */
-  .col-md-6 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
+/* Asegúrate de que el contenedor ocupa el ancho completo de la pantalla */
+.container-fluid {
+  padding: 0;
+  width: 100%;
+}
+
+/* Estilo para el componente de tabla */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto; /* Permite el desplazamiento horizontal si es necesario */
+}
+
+.table {
+  width: 100%; /* La tabla ocupa todo el ancho disponible */
+  border-collapse: collapse; /* Asegura que no haya espacios entre las celdas */
+}
+
+.table th, .table td {
+  padding: 8px;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden; /* Evita que el contenido desborde */
+  text-overflow: ellipsis; /* Muestra puntos suspensivos para contenido largo */
+  white-space: nowrap; /* Evita el ajuste de línea dentro de las celdas */
+}

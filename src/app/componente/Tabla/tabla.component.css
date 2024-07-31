@@ -1,23 +1,48 @@
-.mt-4 {
-    margin-top: 1.5rem; /* Adjust the value as needed */
-  }
-  
-  /* Ensure the table takes the full width of its container */
-  .table {
-    width: 100%;
-  }
-  /* Aumentar el tamaño del campo de búsqueda */
-.custom-search {
-    font-size: 1rem; /* Tamaño de fuente más grande */
-    padding: 0.75rem; /* Espaciado interno mayor */
-  }
-  
-  .container {
-    width: 100%; /* Asegura que el contenedor use el 100% del ancho disponible */
-    padding: 0 15px; /* Agrega un poco de espacio a los lados */
-  }
-  
-  .table-responsive {
-    overflow-x: auto; /* Agrega un scroll horizontal si es necesario */
-  }
-  
+
+/* Ajustar el tamaño del texto en la tabla */
+table th, table td {
+  font-size: 12px;
+}
+
+/* Estilo para controlar el ancho de la tabla y permitir el desplazamiento */
+.table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Asegura que el ancho de las columnas no cambie al ordenar */
+}
+
+.table th, .table td {
+  text-align: center;
+  padding: 8px;
+  vertical-align: middle;
+  overflow: hidden; /* Evita que el contenido desborde las celdas */
+  text-overflow: ellipsis; /* Muestra puntos suspensivos para contenido largo */
+  white-space: nowrap; /* Evita el ajuste de línea dentro de las celdas */
+}
+
+.table th {
+  background-color: #f8f9fa;
+}
+
+.table td {
+  background-color: #ffffff;
+}
+
+/* Ajustar el ancho de cada columna */
+.table th:nth-child(1), .table td:nth-child(1) { min-width: 100px; }
+.table th:nth-child(2), .table td:nth-child(2) { min-width: 150px; }
+.table th:nth-child(3), .table td:nth-child(3) { min-width: 80px; }
+.table th:nth-child(4), .table td:nth-child(4) { min-width: 100px; }
+.table th:nth-child(5), .table td:nth-child(5) { min-width: 120px; }
+.table th:nth-child(6), .table td:nth-child(6) { min-width: 120px; }
+.table th:nth-child(7), .table td:nth-child(7) { min-width: 100px; }
+.table th:nth-child(8), .table td:nth-child(8) { min-width: 100px; }
+.table th:nth-child(9), .table td:nth-child(9) { min-width: 100px; }
+.table th:nth-child(10), .table td:nth-child(10) { min-width: 150px; }
+.table th:nth-child(11), .table td:nth-child(11) { min-width: 100px; }
+.table th:nth-child(12), .table td:nth-child(12) { min-width: 150px; }
