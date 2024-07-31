@@ -2,8 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ServicioService } from 'src/app/servicio/servicio.service';
-
 declare var $: any;
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+
 
 @Component({
   selector: 'app-tabla',
@@ -14,8 +16,27 @@ export class TablaComponent implements OnInit, OnDestroy {
   dataTable: any;
   private searchQuery = new BehaviorSubject<string>(''); // Consulta por defecto vacía
   selectedData: any; // Para almacenar los datos del vehículo seleccionado
+  carForm: FormGroup;
+  car = ["make", "model", "year", "transmission"]
+   
 
-  constructor(private ServicioService: ServicioService) {}
+  constructor(private ServicioService: ServicioService,private fb: FormBuilder) {
+    this.carForm = this.fb.group({
+      make: ['', Validators.required],
+      model: ['', Validators.required],
+      year: ['', [Validators.required, Validators.pattern('^[0-9]{4}$')]],
+      transmission: ['', Validators.required]
+    });
+  }
+
+  onSubmit() {
+    if (this.carForm.valid) {
+      console.log('Form Value:', this.carForm.value);
+    } else {
+      console.log('Form is invalid');
+    }
+  }
+
 
   ngOnInit(): void {
     this.initializeDataTable();
@@ -47,7 +68,7 @@ export class TablaComponent implements OnInit, OnDestroy {
         {
           title: 'Mapa',
           data: null,
-          defaultContent: '<button type="button" class="btn btn-primary">Ver Detalles</button>',
+          defaultContent: '<button type="button" class="btn btn-secondary " >Ubicar</button>',
           orderable: false
         }
       ],

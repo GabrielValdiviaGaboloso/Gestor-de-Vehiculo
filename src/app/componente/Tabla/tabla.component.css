@@ -47,6 +47,6 @@ table th, table td {
 .table th:nth-child(11), .table td:nth-child(11) { min-width: 100px; }
 .table th:nth-child(12), .table td:nth-child(12) { min-width: 150px; }
 
-.map-container{
-  border: 1px solid black; 
+button{
+  border-radius: 2px solid red;
 }
