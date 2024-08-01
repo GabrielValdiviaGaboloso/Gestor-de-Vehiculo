@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ServicioService } from 'src/app/servicio/servicio.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+
 declare var $: any;
 
 interface TranslationMap {
@@ -14,6 +15,7 @@ interface TranslationMap {
   templateUrl: './tabla.component.html',
   styleUrls: ['./tabla.component.css']
 })
+
 export class TablaComponent implements OnInit, OnDestroy {
 
   public searchQuery = new BehaviorSubject<string>(''); // Consulta por defecto vacía
@@ -32,6 +34,8 @@ export class TablaComponent implements OnInit, OnDestroy {
     'year': 'Año',
     'transmission': 'Transmisión'
   };
+
+  
 
   constructor(private ServicioService: ServicioService, private fb: FormBuilder) {
     this.radioForm = this.fb.group({
@@ -62,7 +66,7 @@ export class TablaComponent implements OnInit, OnDestroy {
         { title: 'Ambos MPG', data: 'combination_mpg' },
         { title: 'Cilindrada', data: 'cylinders' },
         { title: 'Desplazamiento', data: 'displacement' },
-        { title: 'Tracción', data: 'drive' },
+        { title: 'Tracción', data: 'drive' }, // Asegúrate de que esta propiedad esté en los datos
         { title: 'Tipo de Combustible', data: 'fuel_type' },
         { title: 'Transmisión', data: 'transmission' },
         {
@@ -101,39 +105,46 @@ export class TablaComponent implements OnInit, OnDestroy {
         }
       }
     });
-
+  
     $('#example tbody').on('click', 'button', (event: any) => {
       const data = this.dataTable.row($(event.target).parents('tr')).data();
       this.selectedData = data;
       this.showModal();
     });
-    
   }
+  
   
   isNumberString(str: any): boolean {
     return typeof str === 'string' && !isNaN(Number(str)) && isFinite(Number(str));
   }
 
-  loadTableData(query: string): void {  
-    if (this.filter === 'year') {
-      // Solo llamar al servicio si query es un número
-      if (this.isNumberString(query)) {
-        if (query) {
-          this.ServicioService.getCars(query, this.filter).subscribe((data: any) => {
-            this.dataTable.clear().rows.add(data).draw();
-          });
-        }
+  loadTableData(query: string): void {
+    if (this.filter === 'year' && this.isNumberString(query)) {
+      if (query) {
+        this.ServicioService.getCars(query, this.filter).subscribe((data: any[]) => {
+          // Proporcionar un valor predeterminado si 'drive' no está presente
+          const validData = data.map(item => ({
+            ...item,
+            drive: item.drive || 'Desconocido' // Valor predeterminado
+          }));
+          this.dataTable.clear().rows.add(validData).draw();
+        });
       }
     } else {
-      // Llamar al servicio sin importar el valor de query
       if (query) {
-        this.ServicioService.getCars(query, this.filter).subscribe((data: any) => {
-          this.dataTable.clear().rows.add(data).draw();
+        this.ServicioService.getCars(query, this.filter).subscribe((data: any[]) => {
+          // Proporcionar un valor predeterminado si 'drive' no está presente
+          const validData = data.map(item => ({
+            ...item,
+            drive: item.drive || 'Desconocido' // Valor predeterminado
+          }));
+          this.dataTable.clear().rows.add(validData).draw();
         });
       }
     }
     this.isLoading = false;
   }
+  
 
   showModal(): void {
     const content = `

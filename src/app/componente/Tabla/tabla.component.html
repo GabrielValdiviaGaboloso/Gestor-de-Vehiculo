@@ -1,35 +1,36 @@
 <div class="container mt-3">
   <div class="row mb-3 align-items-center">
     <div class="col-12 text-center mb-3">
-      <h1>Gestor de Vehículo</h1>
+      <h1>Gestor de Vehículos</h1>
     </div>
     <div class="col-12 col-md-8 mx-auto d-flex align-items-center justify-content-center mb-3">
-      <div class="lds-ring" *ngIf="isLoading"><div></div><div></div><div></div><div></div></div>
-      <div class="lds-static-ring" *ngIf="!isLoading"><div></div><div></div><div></div><div></div></div>
-      <div class="input-group me-2">
-        
-        <input 
-          type="text" 
-          id="searchBox" 
-          class="form-control form-control-sm" 
-          placeholder="Buscar modelo..."
-          (input)="onSearch($event)" />
+      <div class="lds-ring" *ngIf="isLoading">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
-      <button 
-        class="button-verde" 
-        type="button" 
-        data-bs-toggle="modal" 
-        data-bs-target="#filtro"
+      <div class="lds-static-ring" *ngIf="!isLoading">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="input-group me-2">
+        <input type="text" id="searchBox" class="form-control form-control-sm"
+          placeholder="Buscar {{translateOption(this.filter)}}" (input)="onSearch($event)" />
+      </div>
+      <button class="button-verde" type="button" data-bs-toggle="modal" data-bs-target="#filtro"
         aria-label="Abrir filtros">
         Filtros
       </button>
     </div>
     <div class="col-12 text-center">
-      
+
       <p class="mb-0">Filtro activo: <strong>{{translateOption(filter)}}</strong></p>
     </div>
   </div>
-    
+
 
   <div class="row">
     <div class="col-md-12">
@@ -52,7 +53,7 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Aquí van los datos -->
+            
           </tbody>
         </table>
       </div>
@@ -60,7 +61,7 @@
   </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal Mapa-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -69,28 +70,24 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- Aquí se mostrarán los detalles del vehículo -->
-        <p id="modalContent" >Cargando...</p>
+        <p id="modalContent">Cargando...</p>
         <div class="map-container">
-          <app-Mapa></app-Mapa>
+          <app-Mapa ></app-Mapa>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="button-verde" data-bs-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
 </div>
 
-
-
-<div class="modal fade" id="filtro" tabindex="-1" aria-labelledby="filtroLabel" aria-hidden="true" >
+<!-- Modal Filtro-->
+<div class="modal fade" id="filtro" tabindex="-1" aria-labelledby="filtroLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content" >
+    <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
-          <h5 class="modal-title center-auto" id="filtroLabel">Filtro</h5>
-        
-       
+        <h5 class="modal-title center-auto" id="filtroLabel">Filtros</h5>
       </div>
       <div class="modal-body">
         <form [formGroup]="radioForm" (ngSubmit)="onSubmit()">
@@ -101,9 +98,9 @@
             </label>
           </div>
           <div class="modal-footer">
-            <button type="button" class="button-azul"  (click)="onSubmit()">Filtrar</button>
+            <button type="button" class="button-azul" (click)="onSubmit()">Filtrar</button>
             <button type="button" class="button-verde" data-bs-dismiss="modal">Cerrar</button>
-            
+
           </div>
         </form>
       </div>
