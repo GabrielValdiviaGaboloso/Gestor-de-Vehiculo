@@ -49,7 +49,6 @@ export class TablaComponent implements OnInit, OnDestroy {
     this.searchQuery.pipe(
       debounceTime(200) // Esperar 200ms después de que el usuario deje de escribir
     ).subscribe(query => {
-      this.isLoading = false;
       this.loadTableData(query);
     });
   }
@@ -119,31 +118,53 @@ export class TablaComponent implements OnInit, OnDestroy {
   }
 
   loadTableData(query: string): void {
-    if (this.filter === 'year' && this.isNumberString(query)) {
-      if (query) {
-        this.ServicioService.getCars(query, this.filter).subscribe((data: any[]) => {
-          // Proporcionar un valor predeterminado si 'drive' no está presente
-          const validData = data.map(item => ({
-            ...item,
-            drive: item.drive || 'Desconocido' // Valor predeterminado
-          }));
-          this.dataTable.clear().rows.add(validData).draw();
-        });
-      }
+    this.isLoading = true; // Establece isLoading a true al inicio de la llamada
+    
+    // Referencia al contenedor de advertencia
+    const warningMessageElement = document.getElementById('warning-message');
+  
+    if (query) {
+      this.ServicioService.getCars(query, this.filter).subscribe({
+        next: (data: any[]) => {
+          // Verifica que 'data' sea un arreglo
+          if (Array.isArray(data)) {
+            // Proporcionar un valor predeterminado si 'drive' no está presente
+            const validData = data.map(item => ({
+              ...item,
+              drive: item.drive || 'Desconocido' // Valor predeterminado
+            }));
+            this.dataTable.clear().rows.add(validData).draw();
+            // Ocultar mensaje de advertencia en caso de éxito
+            if (warningMessageElement) {
+              warningMessageElement.style.display = 'none';
+            }
+          } else {
+            console.error('La respuesta del servicio no es un arreglo:', data);
+            // Mostrar un mensaje de advertencia al usuario
+            if (warningMessageElement) {
+              warningMessageElement.textContent = 'La respuesta del servicio no es un arreglo.';
+              warningMessageElement.style.display = 'block';
+            }
+          }
+        },
+        error: (error) => {
+          console.error('Error al cargar los datos:', error);
+          // Mostrar un mensaje de advertencia al usuario
+          if (warningMessageElement) {
+            warningMessageElement.textContent = 'En años se debe usar numeros';
+            warningMessageElement.style.display = 'block';
+          }
+        },
+        complete: () => {
+          this.isLoading = false; // Asegúrate de configurar isLoading a false al finalizar
+        }
+      });
     } else {
-      if (query) {
-        this.ServicioService.getCars(query, this.filter).subscribe((data: any[]) => {
-          // Proporcionar un valor predeterminado si 'drive' no está presente
-          const validData = data.map(item => ({
-            ...item,
-            drive: item.drive || 'Desconocido' // Valor predeterminado
-          }));
-          this.dataTable.clear().rows.add(validData).draw();
-        });
-      }
+      this.isLoading = false; // Asegúrate de configurar isLoading a false si no hay consulta
     }
-    this.isLoading = false;
   }
+  
+  
   
 
   showModal(): void {
@@ -159,13 +180,11 @@ export class TablaComponent implements OnInit, OnDestroy {
   }
 
   onSearch(event: Event): void {
-    this.isLoading = true;
     const inputElement = event.target as HTMLInputElement;
     this.searchQuery.next(inputElement.value); // Actualizar el BehaviorSubject con la nueva consulta
   }
 
   onSubmit(): void {  
-    this.isLoading = true;
     this.selectedValue = this.radioForm.value.cars;
     this.filter = `${this.selectedValue}`;
     this.loadTableData(this.searchQuery.value); // Volver a cargar datos con el nuevo filtro
