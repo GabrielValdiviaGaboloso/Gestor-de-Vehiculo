@@ -151,7 +151,7 @@ export class TablaComponent implements OnInit, OnDestroy {
           console.error('Error al cargar los datos:', error);
           // Mostrar un mensaje de advertencia al usuario
           if (warningMessageElement) {
-            warningMessageElement.textContent = 'En años se debe usar numeros';
+            warningMessageElement.textContent = 'En años se debe usar solo numeros';
             warningMessageElement.style.display = 'block';
           }
         },
