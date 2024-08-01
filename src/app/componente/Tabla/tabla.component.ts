@@ -2,10 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ServicioService } from 'src/app/servicio/servicio.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 declare var $: any;
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-
+interface TranslationMap {
+  [key: string]: string;
+}
 
 @Component({
   selector: 'app-tabla',
@@ -13,43 +15,41 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./tabla.component.css']
 })
 export class TablaComponent implements OnInit, OnDestroy {
-  dataTable: any;
-  private searchQuery = new BehaviorSubject<string>(''); // Consulta por defecto vacía
-  selectedData: any; // Para almacenar los datos del vehículo seleccionado
-  carForm: FormGroup;
-  car = ["make", "model", "year", "transmission"]
-   
 
-  constructor(private ServicioService: ServicioService,private fb: FormBuilder) {
-    this.carForm = this.fb.group({
-      make: ['', Validators.required],
-      model: ['', Validators.required],
-      year: ['', [Validators.required, Validators.pattern('^[0-9]{4}$')]],
-      transmission: ['', Validators.required]
+  public searchQuery = new BehaviorSubject<string>(''); // Consulta por defecto vacía
+  dataTable: any;
+  selectedData: any; // Para almacenar los datos del vehículo seleccionado
+  radioForm: FormGroup;
+  selectedValue: string | null = null;
+  filter = 'model'; // Valor por defecto para el filtro
+  isLoading = false; // Variable para gestionar el estado de carga
+  
+  cars = ["make", "model", "year", "transmission"];
+  
+  public translationMap: TranslationMap = {
+    'make': 'Marca',
+    'model': 'Modelo',
+    'year': 'Año',
+    'transmission': 'Transmisión'
+  };
+
+  constructor(private ServicioService: ServicioService, private fb: FormBuilder) {
+    this.radioForm = this.fb.group({
+      cars: ['']  // Valor por defecto si es necesario
     });
   }
 
-  onSubmit() {
-    if (this.carForm.valid) {
-      console.log('Form Value:', this.carForm.value);
-    } else {
-      console.log('Form is invalid');
-    }
-  }
-
-
   ngOnInit(): void {
     this.initializeDataTable();
-
-    // Configurar debounce para la entrada de búsqueda
+    
     this.searchQuery.pipe(
       debounceTime(200) // Esperar 200ms después de que el usuario deje de escribir
     ).subscribe(query => {
+      this.isLoading = false;
       this.loadTableData(query);
     });
   }
 
-  // Inicializar la DataTable
   initializeDataTable(): void {
     this.dataTable = $('#example').DataTable({
       data: [],
@@ -68,7 +68,7 @@ export class TablaComponent implements OnInit, OnDestroy {
         {
           title: 'Mapa',
           data: null,
-          defaultContent: '<button type="button" class="btn btn-secondary " >Ubicar</button>',
+          defaultContent: '<button type="button" class="btn btn-secondary">Ubicar</button>',
           orderable: false
         }
       ],
@@ -102,40 +102,66 @@ export class TablaComponent implements OnInit, OnDestroy {
       }
     });
 
-    // Manejar el evento de clic para los botones
     $('#example tbody').on('click', 'button', (event: any) => {
       const data = this.dataTable.row($(event.target).parents('tr')).data();
       this.selectedData = data;
       this.showModal();
     });
+    
+  }
+  
+  isNumberString(str: any): boolean {
+    return typeof str === 'string' && !isNaN(Number(str)) && isFinite(Number(str));
   }
 
-  // Cargar datos de la tabla desde la API
   loadTableData(query: string): void {  
-    if (query) {
-      this.ServicioService.getCars(query).subscribe((data: any) => {
-        this.dataTable.clear().rows.add(data).draw();
-      });
+    if (this.filter === 'year') {
+      // Solo llamar al servicio si query es un número
+      if (this.isNumberString(query)) {
+        if (query) {
+          this.ServicioService.getCars(query, this.filter).subscribe((data: any) => {
+            this.dataTable.clear().rows.add(data).draw();
+          });
+        }
+      }
+    } else {
+      // Llamar al servicio sin importar el valor de query
+      if (query) {
+        this.ServicioService.getCars(query, this.filter).subscribe((data: any) => {
+          this.dataTable.clear().rows.add(data).draw();
+        });
+      }
     }
+    this.isLoading = false;
   }
 
-  // Mostrar el modal y actualizar el contenido
   showModal(): void {
     const content = `
-    <div class="row">
-          <div class="col-4"><p><strong>Marca:</strong> ${this.selectedData.make}</p></div>
-          <div class="col-4"><p><strong>Modelo:</strong> ${this.selectedData.model}</p></div>
-          <div class="col-4"><p><strong>Año:</strong> ${this.selectedData.year}</p></div>
-        </div>
+      <div class="row">
+        <div class="col-4"><p><strong>Marca:</strong> ${this.selectedData.make}</p></div>
+        <div class="col-4"><p><strong>Modelo:</strong> ${this.selectedData.model}</p></div>
+        <div class="col-4"><p><strong>Año:</strong> ${this.selectedData.year}</p></div>
+      </div>
     `;
     $('#modalContent').html(content);
     $('#exampleModal').modal('show'); // Mostrar el modal
   }
 
-  // Manejar eventos de entrada del campo de búsqueda
   onSearch(event: Event): void {
+    this.isLoading = true;
     const inputElement = event.target as HTMLInputElement;
     this.searchQuery.next(inputElement.value); // Actualizar el BehaviorSubject con la nueva consulta
+  }
+
+  onSubmit(): void {  
+    this.isLoading = true;
+    this.selectedValue = this.radioForm.value.cars;
+    this.filter = `${this.selectedValue}`;
+    this.loadTableData(this.searchQuery.value); // Volver a cargar datos con el nuevo filtro
+  }
+
+  translateOption(option: string): string {
+    return this.translationMap[option as keyof TranslationMap] || option;
   }
 
   ngOnDestroy(): void {

@@ -10,10 +10,10 @@ export class ServicioService {
 
   constructor(private http: HttpClient) {}
 
-  getCars(query: string): Observable<any> {
+  getCars(query: string,filter:string): Observable<any> {
     const headers = new HttpHeaders({
       'X-Api-Key': `${env.APIL_KEY}`
     });
-    return this.http.get(`${env.URL_PRIVATE}?limit=200&model=${query}`, { headers });
+    return this.http.get(`${env.URL_PRIVATE}?limit=200&${filter}=${query}`, { headers });
   }
 }

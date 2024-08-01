@@ -8,45 +8,274 @@ table th, table td {
 .table-wrapper {
   max-width: 100%;
   overflow-x: auto;
+
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed; /* Asegura que el ancho de las columnas no cambie al ordenar */
+  
 }
 
 .table th, .table td {
+ 
+  
   text-align: center;
   padding: 8px;
   vertical-align: middle;
   overflow: hidden; /* Evita que el contenido desborde las celdas */
   text-overflow: ellipsis; /* Muestra puntos suspensivos para contenido largo */
   white-space: nowrap; /* Evita el ajuste de línea dentro de las celdas */
+  
 }
 
 .table th {
   background-color: #f8f9fa;
+
 }
 
 .table td {
+
   background-color: #ffffff;
 }
 
-/* Ajustar el ancho de cada columna */
-.table th:nth-child(1), .table td:nth-child(1) { min-width: 100px; }
-.table th:nth-child(2), .table td:nth-child(2) { min-width: 150px; }
-.table th:nth-child(3), .table td:nth-child(3) { min-width: 80px; }
-.table th:nth-child(4), .table td:nth-child(4) { min-width: 100px; }
-.table th:nth-child(5), .table td:nth-child(5) { min-width: 120px; }
-.table th:nth-child(6), .table td:nth-child(6) { min-width: 120px; }
-.table th:nth-child(7), .table td:nth-child(7) { min-width: 100px; }
-.table th:nth-child(8), .table td:nth-child(8) { min-width: 100px; }
-.table th:nth-child(9), .table td:nth-child(9) { min-width: 100px; }
-.table th:nth-child(10), .table td:nth-child(10) { min-width: 150px; }
-.table th:nth-child(11), .table td:nth-child(11) { min-width: 100px; }
-.table th:nth-child(12), .table td:nth-child(12) { min-width: 150px; }
 
-button{
-  border-radius: 2px solid red;
+#searchBox {
+  font-size: 0.875rem; /* Tamaño de fuente más pequeño */
+  padding: 0.375rem 0.75rem; /* Reducir el padding para achicar el input */
+}
+
+/* Ajuste del tamaño del botón */
+.btn-primary {
+  padding: 0.375rem 0.75rem; /* Reducir el padding del botón */
+  font-size: 0.875rem; /* Tamaño de fuente más pequeño */
+}
+
+/* Ajuste del espaciado entre el input y el botón */
+.input-group {
+  margin-right: 0.5rem; /* Ajustar el margen derecho para espacio entre input y botón */
+}
+
+/* CSS Button*/
+.button-verde {
+  appearance: none;
+  backface-visibility: hidden;
+  background-color: #27ae60;
+  border-radius: 8px;
+  border-style: none;
+  box-shadow: rgba(39, 174, 96, .15) 0 4px 9px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 1.5;
+  outline: none;
+  overflow: hidden;
+  padding: 13px 20px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transform: translate3d(0, 0, 0);
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+
+.button-verde:hover {
+  background-color: #1e8449;
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: .35s;
+}
+
+.button-verde:active {
+  transform: translateY(2px);
+  transition-duration: .35s;
+}
+
+.button-verde:hover {
+  box-shadow: rgba(39, 174, 96, .2) 0 6px 12px;
+}
+
+.button-azul{
+  appearance: none;
+  backface-visibility: hidden;
+  background-color: #2843bb;
+  border-radius: 8px;
+  border-style: none;
+  box-shadow: rgba(39, 174, 96, .15) 0 4px 9px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 1.5;
+  outline: none;
+  overflow: hidden;
+  padding: 13px 20px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transform: translate3d(0, 0, 0);
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.button-azul:hover {
+  background-color: #335dcf;
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: .35s;
+}
+
+.button-azul:active {
+  transform: translateY(2px);
+  transition-duration: .35s;
+}
+
+.button-azul:hover {
+  box-shadow: rgba(39, 174, 96, .2) 0 6px 12px;
+}
+
+
+
+
+/* input*/
+
+.form-control {
+  width: 100%;
+  height: 45px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1.5px solid lightgrey;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0px 0px 20px -18px;
+}
+
+.form-control:hover {
+  border: 2px solid lightgrey;
+  box-shadow: 0px 0px 20px -17px;
+}
+
+.form-control:active {
+  transform: scale(0.95);
+}
+
+.form-control:focus {
+  border: 2px solid grey;
+}
+
+
+
+/*loading*/
+
+
+.lds-ring,
+.lds-ring div {
+  box-sizing: border-box;
+}
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 30px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  margin: 8px;
+  border: 8px solid currentColor;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: currentColor transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.lds-static-ring,
+.lds-static-ring div {
+  box-sizing: border-box;
+}
+
+.lds-static-ring {
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 30px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+}
+
+.lds-static-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  margin: 8px;
+  border: 8px solid currentColor;
+  border-radius: 50%;
+  border-color: currentColor transparent transparent transparent;
+  /* Se ha eliminado la animación */
+  /* animation: lds-static-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite; */
+}
+
+.lds-static-ring div:nth-child(1) {
+  /* Se ha eliminado el retraso de animación */
+  /* animation-delay: -0.45s; */
+}
+
+.lds-static-ring div:nth-child(2) {
+  /* Se ha eliminado el retraso de animación */
+  /* animation-delay: -0.3s; */
+}
+
+.lds-static-ring div:nth-child(3) {
+  /* Se ha eliminado el retraso de animación */
+  /* animation-delay: -0.15s; */
+}
+
+/* Se ha eliminado el keyframes */
+@keyframes lds-static-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
